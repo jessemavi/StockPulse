@@ -5,11 +5,11 @@ var BitcoinPriceController = require('../../db/controllers/bitcoinPrice.js');
 var router = express.Router();
 
 router.route('/')
-  .get(function(req, res) {
+  .post(function(req, res) {
     console.log('GET request to / sent');
-
+    console.log(req.body);
     // retrieve all messages from DB
-    StockMessageController.findAll('AAPL', function(err, messages) {
+    StockMessageController.findAll(req.body.symbol, function(err, messages) {
       if(err) {
         res.json(err);
       }

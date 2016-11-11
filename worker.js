@@ -80,21 +80,5 @@ var getBitcoinPriceData = function(url) {
   });
 };
 
-getBitcoinPriceData('https://api.coindesk.com/v1/bpi/currentprice.json');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// getBitcoinPriceData('https://api.coindesk.com/v1/bpi/currentprice.json');
 

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test</title>
+  <script src="https://unpkg.com/vue@2.0.5/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+  <script src="app.js"></script>
+</head>
+<body>
+  <h1>Stock Messages App</h1>
+
+  <div id="form">
+    <input v-model="symbol" placeholder="Stock Symbol">
+    <button v-on:click="getMessages">Submit</button>
+  </div>
+
+  <div id="messages">
+    <message-item v-for="item in messagesList" v-bind:message="item"></message-item>
+  </div>
+
+
+  <script>  
+
+    var formVue = new Vue({
+      el: '#form',
+      data: {
+        symbol: ''
+      },
+      methods: {
+        getMessages: function() {
+          console.log(this.symbol);
+          Vue.http.post('/stocks', {symbol: this.symbol}).then(function(stocks) {
+            console.log(stocks);
+          }, function(err) {
+            console.log(err);
+          });
+        }
+      }
+    });
+
+    Vue.component('message-item', {
+      props: ['message'],
+      template: '<li>{{ message.messageText }}</li>'
+    });
+
+    var messagesVue = new Vue({
+      el: '#messages',
+      data: {
+        messagesList: [
+          {date: '11/10/16', time: '11:00', messageText: '$TSLA $AAPL $BIDU and the rest complied cleanly but idk about $FB- bizarre chart there after 120 break post 2pm EST.'},
+          {date: '11/10/16', time: '11:03', messageText: '$AAPL know one wants to hold this pos overnight - protests can explode'},
+          {date: '11/10/16', time: '11:07', messageText: '@aby1 but they can go after the changes so technically it wouldn&#39;t have bigger impact unlike $AAPL'}
+        ]
+      }
+    });
+
+
+  </script>
+
+</body>
+</html>
