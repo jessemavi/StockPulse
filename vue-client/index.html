@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Test</title>
+  <title>StockTwits Lite</title>
   <script src="https://unpkg.com/vue@2.0.5/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
-  <script src="app.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
 </head>
+
 <body>
-  <h1>Stock Messages App</h1>
+  <h1>StockTwits Lite</h1>
+  <p>Enter in a stock symbol from the <a href="https://www.bloomberg.com/quote/INDU:IND/members">Dow Jones Industrial Average</a> and click on the submit button to see the last 30 messages from StockTwits that mentioned that stock </p>
 
   <div id="form">
     <input v-model="symbol" placeholder="Stock Symbol">
@@ -15,11 +20,21 @@
   </div>
 
   <div id="messages">
-    <message-item v-for="item in messagesList" v-bind:message="item"></message-item>
+    <message-item id="messageItem" v-for="item in messagesList" v-bind:message="item"></message-item>
   </div>
 
 
-  <script>  
+  <script>
+
+    // global variable to store stock messages returned from the DB
+    var stockMessages;
+
+    // mock data for testing purposes
+    // var testMessages = [
+    //   {date: '11/10/16', time: '11:00', message: '$TSLA $AAPL $BIDU and the rest complied cleanly but idk about $FB- bizarre chart there after 120 break post 2pm EST.'},
+    //   {date: '11/10/16', time: '11:03', message: '$AAPL know one wants to hold this pos overnight - protests can explode'},
+    //   {date: '11/10/16', time: '11:07', message: '@aby1 but they can go after the changes so technically it wouldn&#39;t have bigger impact unlike $AAPL'}
+    // ];
 
     var formVue = new Vue({
       el: '#form',
@@ -28,29 +43,51 @@
       },
       methods: {
         getMessages: function() {
-          console.log(this.symbol);
-          Vue.http.post('/stocks', {symbol: this.symbol}).then(function(stocks) {
-            console.log(stocks);
+          // document.getElementById('messageItem');
+
+          // $('#messageItem').remove();
+
+          console.log('form value =', this.symbol);
+          // post request with the symbol entered in the form to return 30 messages about that stock from the DB
+          Vue.http.post('/stocks', {symbol: this.symbol.toUpperCase()}).then(function(stocks) {
+            // console.log(stocks);
+            stockMessages = stocks.body;
+            console.log('stockMessages value from inside POST request =', stockMessages);
           }, function(err) {
             console.log(err);
+          }).then(function() {
+            // after post request is finished create a new Vue component to extend html with each message
+            Vue.component('message-item', {
+              props: ['message'],
+              template: '<li>{{ message.message }}</li>'
+            });
+
+            console.log('stockMessages value from outside POST request =', stockMessages);
+
+            // document.getElementById('messages').innerHTML = '';
+
+            // vue instance for storing messages
+            var messagesVue = new Vue({
+              el: '#messages',
+              data: {
+                // messagesList: '',
+                messagesList: stockMessages 
+              }
+            });
           });
+
+
+          // trying to see if I can just render the results from the post request directly(not working)
+          // Vue.component('stockMessages', {
+          //   render: function(createElement) {
+          //     console.log('test');
+          //     return createElement('ul', stockMessages.map(function(stock) {
+          //       return createElement('li', stock.message);
+          //     }));
+          //   }  
+          // });
+
         }
-      }
-    });
-
-    Vue.component('message-item', {
-      props: ['message'],
-      template: '<li>{{ message.messageText }}</li>'
-    });
-
-    var messagesVue = new Vue({
-      el: '#messages',
-      data: {
-        messagesList: [
-          {date: '11/10/16', time: '11:00', messageText: '$TSLA $AAPL $BIDU and the rest complied cleanly but idk about $FB- bizarre chart there after 120 break post 2pm EST.'},
-          {date: '11/10/16', time: '11:03', messageText: '$AAPL know one wants to hold this pos overnight - protests can explode'},
-          {date: '11/10/16', time: '11:07', messageText: '@aby1 but they can go after the changes so technically it wouldn&#39;t have bigger impact unlike $AAPL'}
-        ]
       }
     });
 
@@ -58,4 +95,5 @@
   </script>
 
 </body>
+
 </html>
