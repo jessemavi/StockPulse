@@ -14,6 +14,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../vue-client'));
 
+// router
 app.use('/stocks', stockRouter);
 
 app.listen(8000, function() {

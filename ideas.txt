@@ -1,17 +1,13 @@
 App overview:
 
+MVP
+
 Enter in a stock symbol from the Dow Jones 30 index and see a list of the last 30 messages about that stock from StockTwits
 
 -displays 30 most recent StockTwits messages
   -date
   -name
   -message
-
-
-
-
-
-
 
 
 
@@ -35,7 +31,6 @@ Stock page
   "Adjusted Close"
 ]
 
-
 Store data in database
 function that does the following once every 24 hours
 -clears the db 
@@ -51,9 +46,8 @@ function that does the following once every 24 hours
 Stock Price Model
 Stock Message Model
 
-
 API endpoints
 https://api.stocktwits.com/api/2/streams/symbol/fb.json
-https://www.quandl.com/api/v3/datasets/YAHOO/FB.json?api_key=4wwJkhJNy-Me_9N33zxc
+https://www.quandl.com/api/v3/datasets/YAHOO/FB.json?api_key=APIKEY
 https://api.coindesk.com/v1/bpi/currentprice.json
 

@@ -7,7 +7,7 @@ var router = express.Router();
 router.route('/')
   .post(function(req, res) {
     console.log('GET request to / sent');
-    console.log(req.body);
+    console.log('req.body =', req.body);
     // retrieve all messages from DB
     StockMessageController.findAll(req.body.symbol, function(err, messages) {
       if(err) {

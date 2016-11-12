@@ -6,6 +6,7 @@ var stockList = require('./stockList');
 
 mongoose.connect('mongodb://localhost/stockInfo');
 
+// function to add stock data to the DB
 var getStockPriceData = function(stockList) {
   // delete messages from DB
   mongoose.connection.collections['stockmessages'].drop(function(err) {
@@ -21,12 +22,13 @@ var getStockPriceData = function(stockList) {
     request.get(url, function(err, response, body) {
       var stockMessages = JSON.parse(body);
       if(err) {
-        console.log('error', err);
+        console.log(err);
       }
       // console.log(stockMessages);
       var company = stockMessages.symbol.title;
       var symbol = stockMessages.symbol.symbol;
 
+      // iterate over the messages
       stockMessages.messages.forEach(function(message) {
         var date = message.created_at.slice(0, 10);
         var time = message.created_at.slice(11, 16);
@@ -34,7 +36,6 @@ var getStockPriceData = function(stockList) {
         // console.log(date, time, message);
         // console.log(company, symbol);
         stockMessageController.insertOne({company: company, symbol: symbol, date: date, time: time, message: messageText}, function(err, message) {
-          console.log('db insert is working');
           if(err) {
             console.log(err);
           }
@@ -52,7 +53,7 @@ getStockPriceData(stockList);
 
 
 
-
+// function to add bitcoin price data to DB
 var getBitcoinPriceData = function(url) {
   mongoose.connection.collections['bitcoinprices'].drop(function(err) {
     if(err) {
