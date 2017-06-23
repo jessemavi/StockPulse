@@ -1,7 +1,6 @@
 var mongoose  = require('mongoose');
 var request = require('request');
 var stockMessageController = require('./db/controllers/stockMessage');
-// var bitcoinPriceController = require('./db/controllers/bitcoinPrice');
 var stockList = require('./stockList');
 
 mongoose.connect('mongodb://localhost/stockInfo');
