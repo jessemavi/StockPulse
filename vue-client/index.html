@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>StockTwits Lite</title>
+  <title>Stock Pulse</title>
   <script src="https://unpkg.com/vue@2.0.5/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 
 <body>
-  <h1>StockTwits Lite</h1>
+  <h1>Stock Pulse</h1>
   <p>Enter in a stock symbol from the <a href="https://www.bloomberg.com/quote/INDU:IND/members">Dow Jones Industrial Average</a> and click on the submit button to see the last 30 messages from StockTwits that mentioned that stock </p>
 
   <div id="form">
@@ -64,16 +64,6 @@
               }
             });
           });
-
-          // trying to see if I can just render the results from the post request directly(not working)
-          // Vue.component('stockMessages', {
-          //   render: function(createElement) {
-          //     console.log('test');
-          //     return createElement('ul', stockMessages.map(function(stock) {
-          //       return createElement('li', stock.message);
-          //     }));
-          //   }  
-          // });
 
         }
       }

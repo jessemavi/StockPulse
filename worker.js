@@ -1,7 +1,7 @@
 var mongoose  = require('mongoose');
 var request = require('request');
 var stockMessageController = require('./db/controllers/stockMessage');
-var bitcoinPriceController = require('./db/controllers/bitcoinPrice');
+// var bitcoinPriceController = require('./db/controllers/bitcoinPrice');
 var stockList = require('./stockList');
 
 mongoose.connect('mongodb://localhost/stockInfo');
@@ -47,39 +47,4 @@ var getStockPriceData = function(stockList) {
 };
 
 getStockPriceData(stockList);
-
-
-
-
-
-
-// function to add bitcoin price data to DB
-var getBitcoinPriceData = function(url) {
-  mongoose.connection.collections['bitcoinprices'].drop(function(err) {
-    if(err) {
-      console.log(err);
-    }
-  });
-  console.log(url);
-  request.get(url, function(err, response, body) {
-    var bitcoinData = JSON.parse(body);
-    if(err) {
-      console.log(err);
-    }
-    // console.log(bitcoinData.bpi);
-    for(var key in bitcoinData.bpi) {
-      // console.log(bitcoinData.bpi[key]);
-      var currency = bitcoinData.bpi[key];
-      bitcoinPriceController.insertOne({code: currency.code, rate: currency.rate, description: currency.description}, function(err, currency) {
-        if(err) {
-          console.log(err);
-        }
-        console.log('currency successfully inserted into DB');
-      });
-    }
-
-  });
-};
-
-// getBitcoinPriceData('https://api.coindesk.com/v1/bpi/currentprice.json');
 
