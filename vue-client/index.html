@@ -12,7 +12,7 @@
   <p>Enter in a stock symbol from the <a href="https://www.bloomberg.com/quote/INDU:IND/members">Dow Jones Industrial Average</a> and click on the submit button to see the last 30 messages from StockTwits that mentioned that stock </p>
 
   <div id="form">
-    <input v-model="symbol" placeholder="Stock Symbol">
+    <input v-on:keyup.enter="getMessages" v-model="symbol" placeholder="Stock Symbol">
     <button v-on:click="getMessages">Submit</button>
   </div>
 
@@ -42,19 +42,19 @@
           console.log('form value =', this.symbol);
           // post request with the symbol entered in the form to return 30 messages about that stock from the DB
           Vue.http.post('/stocks', {symbol: this.symbol.toUpperCase()}).then(function(stocks) {
-            // console.log(stocks);
+            console.log(stocks);
             stockMessages = stocks.body;
-            console.log('stockMessages value from inside POST request =', stockMessages);
+            // console.log('stockMessages value from inside POST request =', stockMessages);
           }, function(err) {
             console.log(err);
           }).then(function() {
             // after post request is finished create a new Vue component to extend html with each message
             Vue.component('message-item', {
               props: ['message'],
-              template: '<li>{{ message.message }}</li>'
+              template: '<li>{{message.date.slice(0, 10)}} {{message.time}} {{ message.message }}</li>'
             });
 
-            console.log('stockMessages value from outside POST request =', stockMessages);
+            // console.log('stockMessages value from outside POST request =', stockMessages);
 
             // vue instance for storing messages
             var messagesVue = new Vue({
@@ -63,6 +63,8 @@
                 messagesList: stockMessages 
               }
             });
+
+            console.log('Vue instance data', messagesVue.$data.messagesList);
           });
 
         }
