@@ -12,7 +12,8 @@ mongoose.connect('mongodb://localhost/stockInfo');
 // middleware
 app.use(morgan('dev'));
 app.use(bodyParser.json());
-app.use(express.static(__dirname + '/../vue-client'));
+// app.use(express.static(__dirname + '/../vue-client'));
+app.use(express.static(__dirname + '/../angular-client'));
 
 // router
 app.use('/stocks', stockRouter);
